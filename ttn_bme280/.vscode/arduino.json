@@ -1,6 +1,0 @@
-{
-    "port": "/dev/ttyUSB0",
-    "board": "arduino:avr:pro",
-    "configuration": "cpu=8MHzatmega328",
-    "sketch": "ttn_bme280.ino"
-}

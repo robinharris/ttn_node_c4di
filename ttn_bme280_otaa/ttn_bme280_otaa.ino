@@ -1,5 +1,3 @@
-
-
 /*******************************************************************************
  * Copyright (c) 2015 Thomas Telkamp and Matthijs Kooijman
  *
@@ -42,7 +40,6 @@
 #include <hal/hal.h>
 #include <SPI.h>
 #include "LowPower.h"
-#include "i2c.h"
 #include <Adafruit_BME280.h>
 
 Adafruit_BME280 bme280;
@@ -53,10 +50,11 @@ int sleepcycles = 70;  // every sleepcycle will last 8 secs, total sleeptime wil
 bool joined = false;
 bool sleeping = false;
 #define LedPin 2     // pin 13 LED is not used, because it is connected to the SPI port
-#define NO_DEBUG //change to DEBUG to see Serial messages
+#define DEBUG //change to DEBUG to see Serial messages
+
 
 #ifdef DEBUG
-  #define DEBUG_PRINT(x) DEBUG_PRINT(x)
+  #define DEBUG_PRINT(x) Serial.print(x)
   #define DEBUG_PRINTLN(x) Serial.println(x)
   #define DEBUG_HEX_PRINT(x,y) Serial.print(x,y)
 #else
@@ -69,14 +67,14 @@ bool sleeping = false;
 // the bytes. For TTN issued EUIs the last bytes should be 0xD5, 0xB3,
 // 0x70.
 
-static const u1_t DEVEUI[8] = { 0x77, 0x19, 0x56, 0x03, 0x04, 0x56, 0x01, 0x23 };
-static const u1_t APPEUI[8] = { 0x36, 0xF2, 0x00, 0xD0, 0x7E, 0xD5, 0xB3, 0x70 };
+static const u1_t DEVEUI[8]  = { 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static const u1_t APPEUI[8] = { 0x45, 0x00, 0x01, 0xD0, 0x7E, 0xD5, 0xB3, 0x70 };
 
 // This key should be in big endian format (or, since it is not really a
 // number but a block of memory, endianness does not really apply). In
 // practice, a key taken from ttnctl can be copied as-is.
 // The key shown here is the semtech default key.
-static const u1_t APPKEY[16] = { 0x9F, 0xF6, 0x1F, 0xA3, 0x6A, 0x9A, 0x70, 0x66, 0x66, 0xC9, 0x87, 0x54, 0x24, 0x17, 0xDD, 0xD9 };
+static const u1_t APPKEY[16] = { 0x03, 0xB3, 0xDC, 0x78, 0xB2, 0x08, 0x1F, 0x5A, 0x74, 0xC1, 0xFB, 0xF4, 0x0D, 0x46, 0x83, 0xC4 };
 
 void os_getArtEui (u1_t* buf) {
   memcpy(buf, APPEUI, 8);
@@ -255,7 +253,7 @@ void setup(){
   DEBUG_PRINTLN("Starting");
   DEBUG_PRINT("Probe BME280: ");
   boolean status;
-  status = bme280.begin();
+  status = bme280.begin(0x76);
   if (status) {
     DEBUG_PRINTLN("Sensor found");
   }
