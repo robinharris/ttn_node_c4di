@@ -246,14 +246,12 @@ void do_send(osjob_t* j) {
   }
 }
 
-
-
 void setup()
   {
-  Serial.begin(9600);
+  Serial.begin(115200);
   delay(250);
   Serial.println(F("Starting"));
-    Serial.print("Probe BMP280: ");
+    Serial.print("Probe BME280: ");
   boolean status;
   status = bme280.begin(0x76);
   if (status) {
@@ -264,12 +262,6 @@ void setup()
     while (1) {}
   }
 
-  
-
-//    // onetime-measure:
-//    bmp280.setEnabled(0);
-//    bmp280.triggerMeasurement();
-    
   // if LED is connected to pin 10, it has to be defined before any SPI initialization else
   // it will be used as SS (Slave Select) and controlled by the SPI module
       pinMode(LedPin, OUTPUT);
